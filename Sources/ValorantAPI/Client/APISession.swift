@@ -2,9 +2,9 @@ import Foundation
 import HandyOperators
 
 public struct APISession: Codable, Equatable {
-	var accessToken: AccessToken
-	var entitlementsToken: String
-	var cookies: [Cookie]
+	public var accessToken: AccessToken
+	public var entitlementsToken: String
+	public var cookies: [Cookie]
 }
 
 public struct Cookie: Codable, Hashable {
@@ -76,12 +76,6 @@ extension APISession {
 			.getEntitlementsToken()
 		
 		self.cookies = await client.cookies().map(Cookie.init)
-	}
-	
-	public init(accessToken: AccessToken, entitlementsToken: String, cookies: [Cookie]) {
-		self.accessToken = accessToken
-		self.entitlementsToken = entitlementsToken
-		self.cookies = cookies
 	}
 	
 	mutating func refreshAccessToken() async throws {
