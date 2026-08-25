@@ -7,11 +7,18 @@ public struct APISession: Codable, Equatable {
 	var cookies: [Cookie]
 }
 
-struct Cookie: Codable, Hashable {
-	var name: String
-	var value: String
-	var domain: String
-	var path: String
+public struct Cookie: Codable, Hashable {
+	public var name: String
+	public var value: String
+	public var domain: String
+	public var path: String
+	
+	public init(name: String, value: String, domain: String, path: String) {
+		self.name = name
+		self.value = value
+		self.domain = domain
+		self.path = path
+	}
 	
 	init(_ httpCookie: HTTPCookie) {
 		name = httpCookie.name
@@ -30,10 +37,16 @@ struct Cookie: Codable, Hashable {
 	}
 }
 
-struct AccessToken: Codable, Hashable {
-	var type: String
-	var token: String
-	var expiration: Date
+public struct AccessToken: Codable, Hashable {
+	public var type: String
+	public var token: String
+	public var expiration: Date
+	
+	public init(type: String, token: String, expiration: Date) {
+		self.type = type
+		self.token = token
+		self.expiration = expiration
+	}
 	
 	var encoded: String {
 		"\(type) \(token)"
@@ -63,6 +76,12 @@ extension APISession {
 			.getEntitlementsToken()
 		
 		self.cookies = await client.cookies().map(Cookie.init)
+	}
+	
+	public init(accessToken: AccessToken, entitlementsToken: String, cookies: [Cookie]) {
+		self.accessToken = accessToken
+		self.entitlementsToken = entitlementsToken
+		self.cookies = cookies
 	}
 	
 	mutating func refreshAccessToken() async throws {
