@@ -158,6 +158,7 @@ private final actor Client: Identifiable, Protoclient {
 		rawRequest.headers.entitlementsToken = session.entitlementsToken
 		rawRequest.headers.clientVersion = clientVersion
 		rawRequest.headers.clientPlatform = Self.encodedPlatformInfo
+		rawRequest.setValue("Recon Bolt/1.0 (iOS)", forHTTPHeaderField: "User-Agent")
 	}
 	
 	func dispatch<R: Request>(_ rawRequest: URLRequest, for request: R) async throws -> Protoresponse {
