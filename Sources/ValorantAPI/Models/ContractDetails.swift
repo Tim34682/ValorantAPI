@@ -61,9 +61,31 @@ public struct Contract: Codable, Identifiable {
 		@StringKeyedDictionary
 		public var highestRewardedLevel: [LowercaseUUID: Int]
 		
+		public init(totalEarned: Int, highestRewardedLevel: [LowercaseUUID: Int]) {
+			self.totalEarned = totalEarned
+			self.highestRewardedLevel = highestRewardedLevel
+		}
+		
 		private enum CodingKeys: String, CodingKey {
 			case totalEarned = "TotalProgressionEarned"
 			case highestRewardedLevel = "HighestRewardedLevel"
+		}
+		
+		public init(from decoder: Decoder) throws {
+			let container = try decoder.container(keyedBy: CodingKeys.self)
+			self.totalEarned = try container.decode(Int.self, forKey: .totalEarned)
+			self.highestRewardedLevel = try container
+				.decodeIfPresent(StringKeyedDictionary<LowercaseUUID, Int>.self, forKey: .highestRewardedLevel)?
+				.wrappedValue ?? [:]
+		}
+		
+		public func encode(to encoder: Encoder) throws {
+			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(totalEarned, forKey: .totalEarned)
+			try container.encode(
+				StringKeyedDictionary(wrappedValue: highestRewardedLevel),
+				forKey: .highestRewardedLevel
+			)
 		}
 	}
 }
