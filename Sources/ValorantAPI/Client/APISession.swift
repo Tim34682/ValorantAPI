@@ -5,6 +5,12 @@ public struct APISession: Codable, Equatable {
 	public var accessToken: AccessToken
 	public var entitlementsToken: String
 	public var cookies: [Cookie]
+	
+	public init(accessToken: AccessToken, entitlementsToken: String, cookies: [Cookie]) {
+		self.accessToken = accessToken
+		self.entitlementsToken = entitlementsToken
+		self.cookies = cookies
+	}
 }
 
 public struct Cookie: Codable, Hashable {
